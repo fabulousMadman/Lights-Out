@@ -149,19 +149,26 @@ public class PlayerController : MonoBehaviour {
 
 	void FixedUpdate()
 	{
-		float moveHorizontal = Input.GetAxis ("Horizontal");
-		float moveVertical = Input.GetAxis ("Vertical");
-        int moveRect;
-        if (Input.GetKeyDown(KeyCode.Space) && grounded)
+        Vector3 movement;
+        if (SystemInfo.deviceType == DeviceType.Handheld)
         {
-            moveRect = jump;
+            movement = new Vector3(Input.acceleration.x, 0.0f, Input.acceleration.y);
         }
         else
         {
-            moveRect = 0;
+            float moveHorizontal = Input.GetAxis("Horizontal");
+            float moveVertical = Input.GetAxis("Vertical");
+            int moveRect;
+            if (Input.GetKeyDown(KeyCode.Space) && grounded)
+            {
+                moveRect = jump;
+            }
+            else
+            {
+                moveRect = 0;
+            }
+            movement = new Vector3(moveHorizontal, 0.0f, moveVertical);
         }
-
-        Vector3 movement = new Vector3 (moveHorizontal, moveRect, moveVertical);
 
 		rb.AddForce (movement * speed);
         
